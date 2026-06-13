@@ -1,0 +1,56 @@
+.agents
+.vscode
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE Config
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+.springBeans
+
+# Frontend & Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+src/main/frontend/node_modules/
+src/main/frontend/dist/
+.eslintcache
+
+# Logs
+logs/
+*.log
+
+# Env files
+.env
+.env.test
+.env.production
+.env.local
+
+# OS metadata
+.DS_Store
+Thumbs.db
