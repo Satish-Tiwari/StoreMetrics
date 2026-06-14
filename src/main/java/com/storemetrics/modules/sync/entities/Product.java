@@ -1,12 +1,14 @@
 package com.storemetrics.modules.sync.entities;
 
 import com.storemetrics.database.entities.BaseEntity;
-import com.storemetrics.modules.stores.entities.Store;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -14,9 +16,7 @@ import java.math.BigDecimal;
 @Where(clause = "deleted_at IS NULL")
 public class Product extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+
 
     @Column(name = "external_product_id")
     private Long externalProductId;
@@ -37,13 +37,19 @@ public class Product extends BaseEntity {
 
     private String status;
 
-    public Store getStore() {
-        return store;
-    }
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "product_category_mapping",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<ProductCategory> categories;
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
+    @Column(name = "last_sync_time")
+    private LocalDateTime lastSyncTime;
+
+
 
     public Long getExternalProductId() {
         return externalProductId;
@@ -107,5 +113,21 @@ public class Product extends BaseEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<ProductCategory> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<ProductCategory> categories) {
+        this.categories = categories;
+    }
+
+    public LocalDateTime getLastSyncTime() {
+        return lastSyncTime;
+    }
+
+    public void setLastSyncTime(LocalDateTime lastSyncTime) {
+        this.lastSyncTime = lastSyncTime;
     }
 }

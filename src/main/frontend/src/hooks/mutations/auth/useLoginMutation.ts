@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '@lib/api';
+import { API_ENDPOINTS } from '@/config/apiEndpoints';
 
 export function useLoginMutation(onSuccessCallback: (token: string) => void) {
   return useMutation({
     mutationFn: async ({ email, password }: any) => {
-      const res = await api.post('/api/auth/login', { email, password });
+      const res = await api.post(API_ENDPOINTS.LOGIN, { email, password });
       return res.data;
     },
     onSuccess: (data) => {

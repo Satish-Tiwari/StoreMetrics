@@ -1,7 +1,7 @@
 package com.storemetrics.modules.sync.entities;
 
 import com.storemetrics.database.entities.BaseEntity;
-import com.storemetrics.modules.stores.entities.Store;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -14,9 +14,7 @@ import java.math.BigDecimal;
 @Where(clause = "deleted_at IS NULL")
 public class Customer extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+
 
     @Column(name = "external_customer_id")
     private Long externalCustomerId;
@@ -37,13 +35,7 @@ public class Customer extends BaseEntity {
     @Column(name = "total_spent")
     private BigDecimal totalSpent;
 
-    public Store getStore() {
-        return store;
-    }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
 
     public Long getExternalCustomerId() {
         return externalCustomerId;

@@ -62,10 +62,10 @@ jwt:
   expiration: 86400000 # 24 hours
 
 # WooCommerce
-# woocommerce:
-#   site-url: <--site-url-->
-#   consumer-key: <--consumer-key-->
-#   consumer-secret: <--consumer-secret-->
+woocommerce:
+  site-url: <--site-url-->
+  consumer-key: <--consumer-key-->
+  consumer-secret: <--consumer-secret-->
 
 logging:
   level:

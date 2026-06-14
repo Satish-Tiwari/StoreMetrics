@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
         ErrorVm errorVm = new ErrorVm(
                 String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An unexpected error occurred"
+                ex.getMessage() != null ? ex.getMessage() : "An unexpected error occurred"
         );
         return new ResponseEntity<>(errorVm, HttpStatus.INTERNAL_SERVER_ERROR);
     }

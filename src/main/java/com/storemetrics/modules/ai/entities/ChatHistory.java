@@ -1,7 +1,7 @@
 package com.storemetrics.modules.ai.entities;
 
 import com.storemetrics.database.entities.BaseEntity;
-import com.storemetrics.modules.stores.entities.Store;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -10,9 +10,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "chat_history")
 public class ChatHistory extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+
 
     @Column(name = "session_id")
     private String sessionId;
@@ -26,13 +24,7 @@ public class ChatHistory extends BaseEntity {
     @JdbcTypeCode(SqlTypes.VECTOR)
     private float[] embedding;
 
-    public Store getStore() {
-        return store;
-    }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
 
     public String getSessionId() {
         return sessionId;

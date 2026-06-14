@@ -4,9 +4,16 @@ import type { TabId } from '@/types';
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: 'Overview Analytics',
-  stores:   'Stores Manager',
+  sync:     'Sync Manager',
   chat:     'AI RAG Assistant',
   reports:  'Reports Exporter',
+  'data-products': 'Products Data',
+  'data-categories': 'Categories Data',
+  'data-orders': 'Orders Data',
+  'data-customers': 'Customers Data',
+  'data-coupons': 'Coupons Data',
+  'data-refunds': 'Refunds Data',
+  'data-reviews': 'Reviews Data',
 };
 
 interface HeaderProps {

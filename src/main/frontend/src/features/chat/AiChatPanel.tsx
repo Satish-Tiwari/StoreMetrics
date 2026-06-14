@@ -3,11 +3,8 @@ import { MessageSquare, Loader, Send } from 'lucide-react';
 import api from '@lib/api';
 import type { ChatMessage } from '@/types';
 
-interface AiChatPanelProps {
-  selectedStoreId: string;
-}
 
-export const AiChatPanel: React.FC<AiChatPanelProps> = ({ selectedStoreId }) => {
+export const AiChatPanel: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +18,7 @@ export const AiChatPanel: React.FC<AiChatPanelProps> = ({ selectedStoreId }) => 
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !selectedStoreId) return;
+    if (!input.trim()) return;
 
     const userMsg: ChatMessage = { role: 'user', content: input };
     setMessages((prev) => [...prev, userMsg]);
@@ -30,7 +27,6 @@ export const AiChatPanel: React.FC<AiChatPanelProps> = ({ selectedStoreId }) => 
 
     try {
       const res = await api.post('/api/ai/chat', {
-        storeId: selectedStoreId,
         sessionId,
         message: userMsg.content,
       });
@@ -92,15 +88,15 @@ export const AiChatPanel: React.FC<AiChatPanelProps> = ({ selectedStoreId }) => 
         <input
           type="text"
           required
-          disabled={!selectedStoreId || loading}
+          disabled={loading}
           className="flex-1 bg-slate-100 border border-slate-200 focus:border-blue-500 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition"
-          placeholder={selectedStoreId ? "Query store metrics (e.g. What is my best product by revenue?)..." : "Please select or register a store first"}
+          placeholder="Query store metrics (e.g. What is my best product by revenue?)..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
         <button
           type="submit"
-          disabled={!input.trim() || loading || !selectedStoreId}
+          disabled={!input.trim() || loading}
           className="bg-blue-600 hover:bg-blue-500 disabled:bg-slate-200 text-white p-3 rounded-xl hover:shadow-lg active:scale-[0.98] transition shrink-0"
         >
           <Send className="w-5 h-5" />

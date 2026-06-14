@@ -1,12 +1,13 @@
 import React from 'react';
-import type { Store } from '@/types';
+
+type BadgeStatus = 'Active' | 'Syncing' | 'Error' | 'Pending';
 
 interface StatusBadgeProps {
-  status: Store['status'];
+  status: BadgeStatus;
 }
 
 const config: Record<
-  Store['status'],
+  BadgeStatus,
   { wrapper: string; dot: string; label: string }
 > = {
   Active: {

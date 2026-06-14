@@ -1,7 +1,7 @@
 package com.storemetrics.modules.sync.entities;
 
 import com.storemetrics.database.entities.BaseEntity;
-import com.storemetrics.modules.stores.entities.Store;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -16,10 +16,9 @@ import java.util.List;
 @Where(clause = "deleted_at IS NULL")
 public class Order extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
 
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -50,19 +49,15 @@ public class Order extends BaseEntity {
     @Column(name = "date_modified")
     private LocalDateTime dateModified;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refund> refunds;
 
-    public Store getStore() {
-        return store;
-    }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
 
     public Customer getCustomer() {
         return customer;

@@ -1,28 +1,47 @@
 package com.storemetrics.modules.sync.services;
 
-import com.storemetrics.modules.stores.dto.StoreDto;
-import com.storemetrics.modules.stores.services.StoreService;
+import com.storemetrics.config.WooCommerceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class SyncEngineService {
 
     private static final Logger log = LoggerFactory.getLogger(SyncEngineService.class);
-    private final StoreService storeService;
+    private final DataSyncOrchestrator orchestrator;
 
-    public SyncEngineService(StoreService storeService) {
-        this.storeService = storeService;
+    public SyncEngineService(DataSyncOrchestrator orchestrator) {
+        this.orchestrator = orchestrator;
     }
 
+    // Automatically trigger the global sync cycle every 8 hours.
+    // Cron expression: 0 0 */8 * * * (At minute 0 past every 8th hour)
+    @Scheduled(cron = "0 0 */8 * * *")
+    public void scheduledSync() {
+        log.info("Triggering scheduled WooCommerce sync (runs every 8 hours).");
+        orchestrator.executeFullSyncCycle();
+    }
+
+    /**
+     * Trigger a manual sync cycle from the UI or API for all entities.
+     * Uses @Async to avoid blocking the HTTP request.
+     */
     @Async
-    public void startHistoricalSync(UUID storeId) {
-        StoreDto store = storeService.getStoreById(storeId);
-        log.info("Starting historical sync for store: {}", store.getName());
-        // TODO: Implement paginated sync from WooCommerce API
+    public void triggerManualSync() {
+        log.info("Manual global WooCommerce sync triggered.");
+        orchestrator.executeFullSyncCycle();
+    }
+
+    /**
+     * Trigger a manual sync cycle for a specific entity.
+     * Uses @Async to avoid blocking the HTTP request.
+     */
+    @Async
+    public void triggerEntitySync(String entityType) {
+        log.info("Manual WooCommerce sync triggered for entity: {}", entityType);
+        orchestrator.executeEntitySync(entityType);
     }
 }

@@ -4,7 +4,7 @@ StoreMetrics is an all-in-one AI-powered analytics and data synchronization plat
 
 ## 🚀 Features
 
-- **Store Management**: Register multiple WooCommerce stores via REST API or direct MySQL connection.
+- **Store Management**: Configured for a single WooCommerce store via `application.yml` for simplified maintenance and performance.
 - **Background Synchronization**: Headless data ingestion using Spring Boot Scheduling and Redis.
 - **Analytics Dashboard**: Interactive charting (Recharts) covering gross revenue, order volume, and customer retention.
 - **AI Chat Assistant**: Integrated conversational AI using pgvector to answer natural language questions about your store's data trends.

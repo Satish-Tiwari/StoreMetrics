@@ -9,7 +9,7 @@ import java.util.UUID;
 public class ReportService {
 
     @Async
-    public void generateReport(UUID storeId, String format) {
+    public void generateReport(String format) {
         // TODO: Implement PDF/Excel template generation
     }
 }

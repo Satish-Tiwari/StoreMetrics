@@ -18,9 +18,8 @@ public class AnalyticsController {
 
     @GetMapping("/overview")
     public ResponseEntity<Object> getStoreMetrics(
-            @RequestParam UUID storeId,
             @RequestParam String startDate,
             @RequestParam String endDate) {
-        return ResponseEntity.ok(analyticsService.getStoreMetrics(storeId, startDate, endDate));
+        return ResponseEntity.ok(analyticsService.getStoreMetrics(startDate, endDate));
     }
 }

@@ -31,17 +31,20 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+                                .cors(org.springframework.security.config.Customizer.withDefaults())
                                 .csrf(csrf -> csrf
                                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                                                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/api/auth/**").permitAll()
+                                                .requestMatchers("/api/woocommerce/health").permitAll()
                                                 // Manager/Admin endpoints require ADMIN role
                                                 .requestMatchers("/api/manager/**").hasRole("ADMIN")
                                                 // Centralized permissions for new modules
                                                 .requestMatchers("/api/stores/**").authenticated()
                                                 .requestMatchers("/api/analytics/**").authenticated()
                                                 .requestMatchers("/api/reports/**").authenticated()
+                                                .requestMatchers("/api/data/**").authenticated()
                                                 // Allow static resources to be served
                                                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**",
                                                                 "/*.ico", "/*.json", "/*.png")

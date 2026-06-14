@@ -13,9 +13,8 @@ public class AnalyticsService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public com.storemetrics.modules.analytics.dto.AnalyticsPayload getStoreMetrics(UUID storeId, String startDate, String endDate) {
+    public com.storemetrics.modules.analytics.dto.AnalyticsPayload getStoreMetrics(String startDate, String endDate) {
         org.springframework.jdbc.core.namedparam.MapSqlParameterSource params = new org.springframework.jdbc.core.namedparam.MapSqlParameterSource();
-        params.addValue("storeId", storeId);
         // Cast dates to java.sql.Timestamp or java.time.LocalDateTime depending on the string format.
         // The frontend sends format "YYYY-MM-DD". We append time to make it a timestamp since date_created is timestamp.
         params.addValue("startDate", java.sql.Timestamp.valueOf(startDate + " 00:00:00"));
@@ -26,8 +25,7 @@ public class AnalyticsService {
                 "COALESCE(SUM(total), 0) AS gross_revenue, " +
                 "COUNT(id) AS total_orders " +
                 "FROM orders " +
-                "WHERE store_id = :storeId " +
-                "AND status NOT IN ('cancelled', 'failed', 'pending') " +
+                "WHERE status NOT IN ('cancelled', 'failed', 'pending') " +
                 "AND date_created BETWEEN :startDate AND :endDate";
 
         java.util.Map<String, Object> kpiResult = jdbcTemplate.queryForMap(kpiSql, params);
@@ -37,7 +35,7 @@ public class AnalyticsService {
         // Refunds Calculation (simplified approach: sum of refund totals within timeframe)
         String refundSql = "SELECT COALESCE(SUM(amount), 0) AS total_refunds " +
                 "FROM refunds r JOIN orders o ON r.order_id = o.id " +
-                "WHERE o.store_id = :storeId AND r.date_created BETWEEN :startDate AND :endDate";
+                "WHERE r.date_created BETWEEN :startDate AND :endDate";
         java.math.BigDecimal totalRefunds = java.math.BigDecimal.ZERO;
         try {
             totalRefunds = jdbcTemplate.queryForObject(refundSql, params, java.math.BigDecimal.class);
@@ -59,7 +57,7 @@ public class AnalyticsService {
         String cohortSql = "WITH customer_purchases AS (" +
                 "SELECT customer_id, COUNT(id) AS purchase_count " +
                 "FROM orders " +
-                "WHERE store_id = :storeId AND status NOT IN ('cancelled', 'failed', 'pending') " +
+                "WHERE status NOT IN ('cancelled', 'failed', 'pending') " +
                 "GROUP BY customer_id) " +
                 "SELECT " +
                 "COUNT(customer_id) as total_customers, " +
@@ -86,8 +84,7 @@ public class AnalyticsService {
                 "SUM(oi.total) AS total_revenue " +
                 "FROM order_items oi " +
                 "JOIN orders o ON oi.order_id = o.id " +
-                "WHERE o.store_id = :storeId " +
-                "AND o.status NOT IN ('cancelled', 'failed', 'pending') " +
+                "WHERE o.status NOT IN ('cancelled', 'failed', 'pending') " +
                 "AND o.date_created BETWEEN :startDate AND :endDate " +
                 "GROUP BY oi.name " +
                 "ORDER BY total_revenue DESC LIMIT 10";
@@ -107,8 +104,7 @@ public class AnalyticsService {
                 "COALESCE(SUM(total), 0) AS revenue, " +
                 "COUNT(id) AS order_count " +
                 "FROM orders " +
-                "WHERE store_id = :storeId " +
-                "AND status NOT IN ('cancelled', 'failed', 'pending') " +
+                "WHERE status NOT IN ('cancelled', 'failed', 'pending') " +
                 "AND date_created BETWEEN :startDate AND :endDate " +
                 "GROUP BY sales_date " +
                 "ORDER BY sales_date ASC";

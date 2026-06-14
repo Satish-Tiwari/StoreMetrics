@@ -12,7 +12,8 @@ const authSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-type AuthFormData = z.infer<typeof authSchema>;
+export type AuthFormData = z.infer<typeof authSchema>;
+export type RegisterFormData = AuthFormData;
 
 interface AuthPageProps {
   onLoginSuccess: (token: string) => void;

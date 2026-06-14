@@ -1,20 +1,18 @@
 import React from 'react';
-import { LayoutDashboard, Store, MessageSquare, LogOut, Download, Moon, Sun, Monitor, AlertTriangle, TrendingUp, Settings, FileText } from 'lucide-react';
-import type { Store as StoreType, TabId } from '@/types';
+import { LayoutDashboard, Store, MessageSquare, LogOut, Download, Moon, Sun, Monitor, AlertTriangle, TrendingUp, Settings, FileText, RefreshCcw } from 'lucide-react';
+import type { TabId } from '@/types';
 import { useTheme } from '@/components/providers/ThemeProvider';
 
 interface SidebarProps {
-  stores: StoreType[];
-  selectedStoreId: string;
-  onSelectStore: (id: string) => void;
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
   onLogout: () => void;
 }
 
-const NAV_ITEMS: { id: TabId; label: string; icon: React.ReactNode }[] = [
+const NAV_ITEMS: { id: TabId | 'data-explorer'; label: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview Analytics', icon: <TrendingUp className="w-4 h-4" /> },
-  { id: 'stores',   label: 'Stores Manager',     icon: <Settings className="w-4 h-4" /> },
+  { id: 'data-explorer', label: 'Data Explorer', icon: <Store className="w-4 h-4" /> },
+  { id: 'sync',     label: 'Data Sync Manager',  icon: <RefreshCcw className="w-4 h-4" /> },
   { id: 'chat',     label: 'AI Assistant Chat',   icon: <MessageSquare className="w-4 h-4" /> },
   { id: 'reports',  label: 'Reports Exporter',    icon: <FileText className="w-4 h-4" /> },
 ];
@@ -23,9 +21,6 @@ const NAV_ITEMS: { id: TabId; label: string; icon: React.ReactNode }[] = [
  * Fixed left-hand sidebar with branding, store selector, navigation, and logout.
  */
 export const Sidebar: React.FC<SidebarProps> = ({
-  stores,
-  selectedStoreId,
-  onSelectStore,
   activeTab,
   onTabChange,
   onLogout,
@@ -46,47 +41,68 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
         </div>
 
-        {/* Store Selector */}
-        <div className="p-4 border-b border-slate-800">
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            Selected Store
-          </label>
-          {stores.length > 0 ? (
-            <select
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-blue-500"
-              value={selectedStoreId}
-              onChange={(e) => onSelectStore(e.target.value)}
-            >
-              {stores.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <div className="text-xs text-amber-500 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              <span>No store registered</span>
-            </div>
-          )}
-        </div>
 
         {/* Navigation */}
         <nav className="p-4 space-y-1.5">
-          {NAV_ITEMS.map(({ id, label, icon }) => (
-            <button
-              key={id}
-              onClick={() => onTabChange(id)}
-              className={`w-full flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium transition ${
-                activeTab === id
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-              }`}
-            >
-              {icon}
-              <span>{label}</span>
-            </button>
-          ))}
+          {NAV_ITEMS.map(({ id, label, icon }) => {
+            const isDataExplorer = id === 'data-explorer';
+            const isActive = activeTab === id || (isDataExplorer && activeTab.startsWith('data-'));
+            const [isExpanded, setIsExpanded] = React.useState(isActive);
+
+            if (isDataExplorer) {
+              return (
+                <div key={id} className="space-y-1">
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className={`w-full flex items-center justify-between py-2.5 px-4 rounded-lg text-sm font-medium transition ${
+                      isActive
+                        ? 'bg-blue-600/10 text-blue-400'
+                        : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      {icon}
+                      <span>{label}</span>
+                    </div>
+                    <span className="text-xs">{isExpanded ? '▼' : '▶'}</span>
+                  </button>
+                  
+                  {isExpanded && (
+                    <div className="pl-11 pr-4 py-1 space-y-1">
+                      {['products', 'categories', 'orders', 'customers', 'coupons', 'refunds', 'reviews'].map(sub => (
+                        <button
+                          key={sub}
+                          onClick={() => onTabChange(`data-${sub}` as TabId)}
+                          className={`w-full text-left py-1.5 px-2 rounded-md text-sm transition ${
+                            activeTab === `data-${sub}`
+                              ? 'text-blue-400 font-medium'
+                              : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                          }`}
+                        >
+                          <span className="capitalize">{sub}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <button
+                key={id}
+                onClick={() => onTabChange(id)}
+                className={`w-full flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium transition ${
+                  activeTab === id
+                    ? 'bg-blue-600 text-white'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                }`}
+              >
+                {icon}
+                <span>{label}</span>
+              </button>
+            );
+          })}
         </nav>
       </div>
 

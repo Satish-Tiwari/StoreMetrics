@@ -3,13 +3,12 @@ import { FileText, Loader } from 'lucide-react';
 import api from '@lib/api';
 
 interface ReportsExporterProps {
-  selectedStoreId: string;
+
   startDate: string;
   endDate: string;
 }
 
 export const ReportsExporter: React.FC<ReportsExporterProps> = ({
-  selectedStoreId,
   startDate,
   endDate,
 }) => {
@@ -19,14 +18,12 @@ export const ReportsExporter: React.FC<ReportsExporterProps> = ({
 
   const handleExport = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedStoreId) return;
 
     setLoading(true);
     setProgress('Enqueuing report assembly task...');
 
     try {
       const res = await api.post('/api/reports/generate', {
-        storeId: selectedStoreId,
         format: reportFormat,
         startDate,
         endDate,
@@ -128,7 +125,7 @@ export const ReportsExporter: React.FC<ReportsExporterProps> = ({
 
         <button
           type="submit"
-          disabled={loading || !selectedStoreId}
+          disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-slate-200 text-white font-semibold py-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/20 transition flex items-center justify-center gap-2"
         >
           {loading ? <Loader className="w-5 h-5 animate-spin" /> : 'Queue Compilation'}

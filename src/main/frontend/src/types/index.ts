@@ -1,16 +1,8 @@
 // ─── Entity Types ────────────────────────────────────────────────────────────
 
-export interface Store {
-  id: string;
-  name: string;
-  storeUrl: string;
-  status: 'Active' | 'Syncing' | 'Error' | 'Pending';
-  lastSyncedAt?: string;
-}
 
 export interface SyncLog {
   id: string;
-  storeId: string;
   status: 'Pending' | 'Processing' | 'Success' | 'Failed';
   startedAt: string;
   completedAt?: string;
@@ -55,34 +47,21 @@ export interface AnalyticsPayload {
 
 // ─── UI / State Types ─────────────────────────────────────────────────────────
 
-export type TabId = 'overview' | 'stores' | 'chat' | 'reports';
+export type TabId = 
+  | 'overview' 
+  | 'chat' 
+  | 'reports' 
+  | 'sync'
+  | 'data-products'
+  | 'data-categories'
+  | 'data-orders'
+  | 'data-customers'
+  | 'data-coupons'
+  | 'data-refunds'
+  | 'data-reviews';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
 
-export interface StoreVerificationData {
-  apiConnected: boolean;
-  apiVersion?: string;
-  dbConnected: boolean | null;
-  dbVersion?: string;
-}
-
-export interface StoreVerificationState {
-  loading?: boolean;
-  error?: string;
-  data?: StoreVerificationData;
-}
-
-export interface AddStorePayload {
-  name: string;
-  storeUrl: string;
-  consumerKey: string;
-  consumerSecret: string;
-  dbHost: string | null;
-  dbPort: number | null;
-  dbUser: string | null;
-  dbPassword: string | null;
-  dbName: string | null;
-}
