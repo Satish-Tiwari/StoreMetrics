@@ -51,6 +51,9 @@ logs/
 .env.production
 .env.local
 
+# Yml File
+src/main/resources/application.yml
+
 # OS metadata
 .DS_Store
 Thumbs.db

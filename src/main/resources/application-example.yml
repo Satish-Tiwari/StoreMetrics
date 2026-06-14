@@ -58,5 +58,21 @@ server:
 
 # JWT Secret config
 jwt:
-  secret: ${JWT_SECRET:8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92}
+  secret: <--JWT SECRET-->
   expiration: 86400000 # 24 hours
+
+# WooCommerce
+woocommerce:
+  site-url: <--site-url-->
+  consumer-key: <--consumer-key-->
+  consumer-secret: <--consumer-secret-->
+
+logging:
+  level:
+    root: WARN
+    org.springframework: WARN
+    org.hibernate: WARN
+    org.apache.kafka: WARN
+    org.springframework.security: WARN
+    org.springframework.web: INFO
+    com.storemetrics: INFO

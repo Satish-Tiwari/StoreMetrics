@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/manager")
+@RequestMapping("/api/manager")
 public class AdminController {
 
     private final UserRepository userRepository;
