@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/stores")
+@RequestMapping("/api/stores")
 public class StoreController {
 
     private final StoreService storeService;

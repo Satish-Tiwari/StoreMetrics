@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Loader, ArrowRight, ShieldAlert, CheckCircle } from 'lucide-react';
-import { useAuth } from '@hooks/useAuth';
+
 import { useLoginMutation } from '@hooks/mutations/auth/useLoginMutation';
 import { useRegisterMutation } from '@hooks/mutations/auth/useRegisterMutation';
 
@@ -14,9 +14,12 @@ const authSchema = z.object({
 
 type AuthFormData = z.infer<typeof authSchema>;
 
-export const AuthPage: React.FC = () => {
-  const { loginSuccess } = useAuth();
-  const loginMutation = useLoginMutation(loginSuccess);
+interface AuthPageProps {
+  onLoginSuccess: (token: string) => void;
+}
+
+export const AuthPage: React.FC<AuthPageProps> = ({ onLoginSuccess }) => {
+  const loginMutation = useLoginMutation(onLoginSuccess);
   const registerMutation = useRegisterMutation();
   const [isRegistering, setIsRegistering] = useState(false);
 

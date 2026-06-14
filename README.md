@@ -15,7 +15,7 @@ StoreMetrics is an all-in-one AI-powered analytics and data synchronization plat
 The platform is designed as a highly scalable monolith, utilizing:
 
 - **Frontend**: React 18, Vite, Tailwind CSS, TanStack Query, React Hook Form, Recharts.
-- **Backend**: Java 21, Spring Boot, Spring MVC, Spring Data JPA, Spring Security.
+- **Backend**: Java 17, Spring Boot, Spring MVC, Spring Data JPA, Spring Security.
 - **Database**: PostgreSQL (with `pgvector` for semantic RAG) and Redis (for caching and job queues).
 
 The Vite frontend is compiled directly into the Spring Boot `src/main/resources/static` directory, allowing both applications to be served securely on a single port (8080).
@@ -52,7 +52,8 @@ To run this project locally, you will need:
    mvn spring-boot:run
    ```
 
-The application will be available at `http://localhost:8080`.
+The application will be available at `http://localhost:8081`.
+Acuator Metrics: `http://localhost:8081/actuator/metrics`
 
 ## 📜 License
 

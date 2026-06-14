@@ -68,7 +68,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                .orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("Invalid email or password"));
 
         // Send Kafka Event via Broker Interface
         UserEvent event = new UserEvent(user.getEmail(), user.getEmail().split("@")[0], "USER_LOGIN");

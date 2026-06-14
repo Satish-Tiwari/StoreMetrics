@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/analytics")
+@RequestMapping("/api/analytics")
 public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
@@ -16,8 +16,11 @@ public class AnalyticsController {
         this.analyticsService = analyticsService;
     }
 
-    @GetMapping("/store/{storeId}")
-    public ResponseEntity<Object> getStoreMetrics(@PathVariable UUID storeId) {
-        return ResponseEntity.ok(analyticsService.getStoreMetrics(storeId));
+    @GetMapping("/overview")
+    public ResponseEntity<Object> getStoreMetrics(
+            @RequestParam UUID storeId,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return ResponseEntity.ok(analyticsService.getStoreMetrics(storeId, startDate, endDate));
     }
 }

@@ -46,4 +46,37 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorVm, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
+    public ResponseEntity<ErrorVm> handleAuthenticationException(org.springframework.security.core.AuthenticationException ex, WebRequest request) {
+        log.warn("Authentication Failed: {}", ex.getMessage());
+        ErrorVm errorVm = new ErrorVm(
+                String.valueOf(HttpStatus.UNAUTHORIZED.value()),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                ex.getMessage() != null ? ex.getMessage() : "Authentication failed"
+        );
+        return new ResponseEntity<>(errorVm, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorVm> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        log.warn("Illegal Argument: {}", ex.getMessage());
+        ErrorVm errorVm = new ErrorVm(
+                String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorVm, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorVm> handleValidationException(org.springframework.web.bind.MethodArgumentNotValidException ex, WebRequest request) {
+        log.warn("Validation Error: {}", ex.getMessage());
+        ErrorVm errorVm = new ErrorVm(
+                String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Validation failed for one or more fields"
+        );
+        return new ResponseEntity<>(errorVm, HttpStatus.BAD_REQUEST);
+    }
 }

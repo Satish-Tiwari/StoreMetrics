@@ -10,7 +10,7 @@ export const useSyncLogsQuery = (storeId: string | null) => {
   return useQuery({
     queryKey: ['stores', storeId, 'logs'],
     queryFn: async (): Promise<SyncLog[]> => {
-      const { data } = await api.get(`/api/v1/stores/${storeId}/logs`);
+      const { data } = await api.get(`/api/stores/${storeId}/logs`);
       return data;
     },
     enabled: !!storeId,
